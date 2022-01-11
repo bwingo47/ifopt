@@ -28,10 +28,10 @@ if (BUILD_IPOPT)
   add_subdirectory(ifopt_ipopt)
 endif()
 
-option(BUILD_SNOPT "compile with SNOPT solver" OFF)
-if (BUILD_SNOPT)
-  add_subdirectory(ifopt_snopt)
-endif()
+option(BUILD_SNOPT "compile with SNOPT solver" ON)
+
+add_subdirectory(ifopt_snopt)
+
 
 
 ##################################################

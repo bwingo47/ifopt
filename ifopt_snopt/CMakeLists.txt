@@ -22,13 +22,13 @@ target_link_libraries(${LIB_SNOPT}
   PRIVATE  
     ${SNOPT_LIBRARIES}
 )
-if(${SNOPT_v76})
+
   message(STATUS "compiling for snopt version >= 7.6")
   target_compile_definitions(${LIB_SNOPT} 
     PRIVATE
       -DSNOPT76
   )
-endif()
+
 
 
 #############

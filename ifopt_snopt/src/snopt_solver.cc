@@ -38,14 +38,14 @@ SnoptSolver::Solve (Problem& ref)
   // A complete list of options can be found in the snopt user guide:
   // https://web.stanford.edu/group/SOL/guides/sndoc7.pdf
   snopt.setProbName( "snopt" );
-  snopt.setIntParameter( "Major Print level", 1 );
+  snopt.setIntParameter( "Major Print level", 2 );
   snopt.setIntParameter( "Minor Print level", 1 );
-  snopt.setIntParameter( "Derivative option", 1 ); // 1 = snopt will not calculate missing derivatives
+  snopt.setIntParameter( "Derivative option", 1 ); // 1 = snopt will not calculate missing derivatives; 0 = finite diff
   snopt.setIntParameter( "Verify level ", 3 ); // full check on gradients, will throw error
   snopt.setIntParameter("Iterations limit", 200000);
-  snopt.setRealParameter( "Major feasibility tolerance",  1.0e-4); // target nonlinear constraint violation
-  snopt.setRealParameter( "Minor feasibility tolerance",  1.0e-4); // for satisfying the QP bounds
-  snopt.setRealParameter( "Major optimality tolerance",   1.0e-2); // target complementarity gap
+  snopt.setRealParameter( "Major feasibility tolerance",  1.0e-3); // target nonlinear constraint violation
+  snopt.setRealParameter( "Minor feasibility tolerance",  1.0e-3); // for satisfying the QP bounds
+  snopt.setRealParameter( "Major optimality tolerance",   1.0e-3); // target complementarity gap
 
 
   // error codes as given in the manual.
@@ -53,7 +53,7 @@ SnoptSolver::Solve (Problem& ref)
 
 
   // interface changed with snopt version 7.6
-#ifdef SNOPT76
+// #ifdef SNOPT76
   int nS = 0; // number of super-basic variables (not relevant for cold start)
   int nInf;   // nInf : number of constraints outside of the bounds
   double sInf;// sInf : sum of infeasibilities
@@ -66,15 +66,15 @@ SnoptSolver::Solve (Problem& ref)
                      snopt.x, snopt.xstate, snopt.xmul,
                      snopt.F, snopt.Fstate, snopt.Fmul,
                      nS, nInf, sInf);
-#else
-  status_ = snopt.solve(Cold);
-#endif
+// #else
+//   status_ = snopt.solve(Cold);
+// #endif
 
   int EXIT = status_ - status_%10; // change least significant digit to zero
 
   if (EXIT != 0) {
     std::string msg = "ERROR: Snopt failed to find a solution. EXIT:" + std::to_string(EXIT) + ", INFO:" + std::to_string(status_) + "\n";
-    throw std::runtime_error(msg);
+//    throw std::runtime_error(msg);
   }
 
   snopt.SetVariables();
